@@ -29,8 +29,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public GenericProductDTO updateProduct(GenericProductDTO genericProductDTO, long productId) {
-        Optional<Product> productOptional = Optional.of(productRepository.findById(productId).orElseThrow());
-        Product product = productOptional.get();
+        Product product = productRepository.findById(productId).orElseThrow();
         product.setTitle(genericProductDTO.getTitle());
         product.getCategory().setName(genericProductDTO.getCategory());
         product.getPrice().setValue(genericProductDTO.getPrice());
@@ -42,9 +41,12 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public GenericProductDTO deleteProduct(long productId) {
-        Optional<Product> product = Optional.of(productRepository.findById(productId).orElseThrow());
-        productRepository.delete(product.get());
-        return from(product.get());
+        return productRepository.findById(productId)
+                .map((product)->{
+                    productRepository.delete(product);
+                    return from(product);
+                })
+                .orElseThrow();
     }
 
     public Product from (GenericProductDTO genericProductDTO){
