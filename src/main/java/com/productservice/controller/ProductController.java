@@ -23,4 +23,14 @@ public class ProductController {
         GenericProductDTO genericProductDTO = productService.getProductById(productId);
         return new ResponseEntity<>(genericProductDTO, HttpStatus.FOUND);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericProductDTO> updateProduct(@RequestBody GenericProductDTO genericProductDTO, @PathVariable("id") long productId){
+        GenericProductDTO productDTO = productService.updateProduct(genericProductDTO,productId);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GenericProductDTO> deleteProduct(@PathVariable("id") long productId){
+        GenericProductDTO genericProductDTO = productService.deleteProduct(productId);
+        return new ResponseEntity<>(genericProductDTO,HttpStatus.OK);
+    }
 }

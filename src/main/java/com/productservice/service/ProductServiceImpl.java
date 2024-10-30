@@ -27,6 +27,26 @@ public class ProductServiceImpl implements ProductService{
         return from(product.get());
     }
 
+    @Override
+    public GenericProductDTO updateProduct(GenericProductDTO genericProductDTO, long productId) {
+        Optional<Product> productOptional = Optional.of(productRepository.findById(productId).orElseThrow());
+        Product product = productOptional.get();
+        product.setTitle(genericProductDTO.getTitle());
+        product.getCategory().setName(genericProductDTO.getCategory());
+        product.getPrice().setValue(genericProductDTO.getPrice());
+        product.setDescription(genericProductDTO.getDescription());
+        product.setImage(genericProductDTO.getImage());
+        productRepository.save(product);
+        return genericProductDTO;
+    }
+
+    @Override
+    public GenericProductDTO deleteProduct(long productId) {
+        Optional<Product> product = Optional.of(productRepository.findById(productId).orElseThrow());
+        productRepository.delete(product.get());
+        return from(product.get());
+    }
+
     public Product from (GenericProductDTO genericProductDTO){
         Product product = new Product();
         Category category = new Category();

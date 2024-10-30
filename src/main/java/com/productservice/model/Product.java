@@ -16,10 +16,10 @@ public class Product extends BaseModel{
     private String description;
     private String  image;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="category_id")
     private Category category;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}) //Add and remove price when product is added or removed
+    @OneToOne(cascade = {CascadeType.ALL}) //Add and remove price when product is added or removed
     private Price price;
 }
