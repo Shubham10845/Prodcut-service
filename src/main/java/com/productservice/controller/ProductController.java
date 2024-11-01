@@ -3,6 +3,7 @@ package com.productservice.controller;
 import com.productservice.dto.GenericProductDTO;
 import com.productservice.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,11 @@ public class ProductController {
     public ResponseEntity<GenericProductDTO> getProductById(@PathVariable("id") long productId){
         GenericProductDTO genericProductDTO = productService.getProductById(productId);
         return new ResponseEntity<>(genericProductDTO, HttpStatus.FOUND);
+    }
+    @GetMapping("/{page}/{size}")
+    public ResponseEntity<Page<GenericProductDTO>> getAllProduct(@PathVariable("page") int pageNumber, @PathVariable("size") int pageSize){
+        Page<GenericProductDTO> productDTOS = productService.getAllProduct(pageNumber,pageSize);
+        return new ResponseEntity<>(productDTOS,HttpStatus.OK);
     }
     @PutMapping("/{id}")
     public ResponseEntity<GenericProductDTO> updateProduct(@RequestBody GenericProductDTO genericProductDTO, @PathVariable("id") long productId){

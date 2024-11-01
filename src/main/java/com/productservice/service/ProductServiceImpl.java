@@ -6,8 +6,10 @@ import com.productservice.model.Price;
 import com.productservice.model.Product;
 import com.productservice.repository.ProductRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -25,6 +27,11 @@ public class ProductServiceImpl implements ProductService{
     public GenericProductDTO getProductById(long productId) {
         Optional<Product> product = Optional.of(productRepository.findById(productId).orElseThrow());
         return from(product.get());
+    }
+
+    @Override
+    public Page<GenericProductDTO> getAllProduct(int pageNumber, int pageSize) {
+        return productRepository.findAll(PageRequest.of(pageNumber,pageSize, Sort.by("title"))).map(this::from);
     }
 
     @Override
