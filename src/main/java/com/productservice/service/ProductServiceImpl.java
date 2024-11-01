@@ -10,17 +10,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
+
     @Override
     public GenericProductDTO createProduct(GenericProductDTO genericProductDTO) {
         Product product = from(genericProductDTO);
         Product savedProduct = productRepository.save(product);
         return from(savedProduct);
+    }
+
+    @Override
+    public List<GenericProductDTO> createProductsInBulk(List<GenericProductDTO> productDTOS) {
+        List<Product> products = productDTOS.stream()
+                .map(this::from)
+                .collect(Collectors.toList());
+        return productRepository.saveAll(products)
+                .stream()
+                .map(this::from)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -31,7 +46,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Page<GenericProductDTO> getAllProduct(int pageNumber, int pageSize) {
-        return productRepository.findAll(PageRequest.of(pageNumber,pageSize, Sort.by("title"))).map(this::from);
+        return productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by("title"))).map(this::from);
     }
 
     @Override
@@ -49,14 +64,14 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public GenericProductDTO deleteProduct(long productId) {
         return productRepository.findById(productId)
-                .map((product)->{
+                .map((product) -> {
                     productRepository.delete(product);
                     return from(product);
                 })
                 .orElseThrow();
     }
 
-    public Product from (GenericProductDTO genericProductDTO){
+    public Product from(GenericProductDTO genericProductDTO) {
         Product product = new Product();
         Category category = new Category();
         Price price = new Price();
@@ -69,7 +84,8 @@ public class ProductServiceImpl implements ProductService{
         product.setCategory(category);
         return product;
     }
-    public GenericProductDTO from(Product product){
+
+    public GenericProductDTO from(Product product) {
         GenericProductDTO genericProductDTO = new GenericProductDTO();
         genericProductDTO.setTitle(product.getTitle());
         genericProductDTO.setDescription(product.getDescription());

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -17,6 +18,11 @@ public class ProductController {
     public ResponseEntity<GenericProductDTO> createProduct(@RequestBody GenericProductDTO genericProductDTO){
         GenericProductDTO genericProductDTO1 = productService.createProduct(genericProductDTO);
         return new ResponseEntity<>(genericProductDTO1, HttpStatus.OK);
+    }
+    @PostMapping("/bulk")
+    public ResponseEntity<List<GenericProductDTO>> createProductsInBulk(@RequestBody List<GenericProductDTO> productDTOS){
+        List<GenericProductDTO> productDTOList = productService.createProductsInBulk(productDTOS);
+        return new ResponseEntity<>(productDTOList,HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<GenericProductDTO> getProductById(@PathVariable("id") long productId){
