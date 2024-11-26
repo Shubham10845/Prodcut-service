@@ -14,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
 @Repository
-//@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public interface CategoryRepository extends JpaRepository<Category,Long> {
-    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
-    Page<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
+
 }
