@@ -27,7 +27,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<GenericProductDTO> getProductById(@PathVariable("id") long productId){
         GenericProductDTO genericProductDTO = productService.getProductById(productId);
-        return new ResponseEntity<>(genericProductDTO, HttpStatus.FOUND);
+        return new ResponseEntity<>(genericProductDTO, HttpStatus.OK);
     }
     @GetMapping("/{page}/{size}")
     public ResponseEntity<Page<GenericProductDTO>> getAllProduct(@PathVariable("page") int pageNumber, @PathVariable("size") int pageSize){
